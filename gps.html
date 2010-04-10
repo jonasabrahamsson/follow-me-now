@@ -31,13 +31,13 @@ function showGPS(position) {
   form.submit();
 }
 function initialize() {
- var getLocationInterval = setInterval(getGPS, 5000);
+ var getLocationInterval = setInterval(getGPS, 30000);
 }
 </script>
 </head>
 
 <body onload="initialize();" >
-<form action="http://localhost:8084/123/gps/" method="post" name="updateLocation">
+<form action="/123/gps/" method="post" name="updateLocation">
 Longitude: <input type=text name="longitude"><br>
 Latitude: <input type=text name="latitude"><br><input type="submit"></form>
 
