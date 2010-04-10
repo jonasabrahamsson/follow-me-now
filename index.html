@@ -19,21 +19,22 @@ var initialLocation;
 var siberia = new google.maps.LatLng(60, 105);
 var newyork = new google.maps.LatLng(40.69847032728747, -73.9514422416687);
 var browserSupportFlag =  new Boolean();
+var map;
+var marker;
 
 function updateLocation(loc)
 {
-	altert("Received position " + loc.latitude + ":" + loc.longitude);
 	newLocation = new google.maps.LatLng(loc.latitude, loc.longitude);
 	map.setCenter(newLocation);
-	marker.position = newLocation;
+	marker.setPosition(newLocation);
 }
 
 function getLocation()
 {
 	$.ajax({
 	method: 'get',
-	url : 'http://localhost:8080/123',
-	dataType : 'text',
+	url : 'http://localhost:8080/get?id=123',
+	dataType : 'json',
 	success: updateLocation
 });
 }
@@ -43,8 +44,7 @@ function initialize() {
     zoom: 6,
     mapTypeId: google.maps.MapTypeId.ROADMAP
   };
-  var map = new google.maps.Map(document.getElementById("map_canvas"), myOptions);
-  var marker;
+  map = new google.maps.Map(document.getElementById("map_canvas"), myOptions);
 
   var getLocationInterval = setInterval(getLocation, 1000);
   
@@ -55,7 +55,6 @@ function initialize() {
       initialLocation = new google.maps.LatLng(position.coords.latitude,position.coords.longitude);
       map.setCenter(initialLocation);
       marker = new google.maps.Marker({
-            position: initialLocation,
             map: map, 
             title:"Follow me now!"
       });   
