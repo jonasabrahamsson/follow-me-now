@@ -32,10 +32,15 @@ ID_RE = '/([a-z0-9_-]+)/'
 
 def main():
   application = webapp.WSGIApplication([('/', MainHandler),
+                                        ('/acquire', handlers.AcquireId),
+                                        ('/acquire/', handlers.AcquireId),
+                                        ('/aquire', handlers.AcquireId),
+                                        ('/aquire/', handlers.AcquireId),
+					(ID_RE, handlers.MainHandler),
+					(ID_RE + 'dev/', handlers.DevHandler),
                                         ('/gps/', handlers.GpsHandler),
                                         (ID_RE + 'gps/', handlers.GpsHandler),                                        
-                                        ('/aquire', handlers.AquireId),
-                                         (ID_RE, handlers.LocationHandler)],
+                                         (ID_RE + 'location/', handlers.LocationHandler)],
                                        debug=True)
   util.run_wsgi_app(application)
 

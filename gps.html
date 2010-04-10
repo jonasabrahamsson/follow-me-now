@@ -14,7 +14,7 @@
 
 function getGPS() {
 if (navigator.geolocation) {
-navigator.geolocation.getCurrentPosition(showGPS, gpsError);
+navigator.geolocation.getCurrentPosition(postGPS, gpsError);
 } else {
 gpsText.innerText = "No GPS Functionality.";
 }
@@ -28,10 +28,16 @@ function showGPS(position) {
   form = document.updateLocation;
   form.longitude.value = position.coords.longitude;
   form.latitude.value = position.coords.latitude;
+}
+function postGPS(position) {
+  form = document.updateLocation;
+  form.longitude.value = position.coords.longitude;
+  form.latitude.value = position.coords.latitude;
   form.submit();
 }
 function initialize() {
  var getLocationInterval = setInterval(getGPS, 30000);
+ navigator.geolocation.getCurrentPosition(showGPS, gpsError);
 }
 </script>
 </head>

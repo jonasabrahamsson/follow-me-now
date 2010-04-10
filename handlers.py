@@ -7,7 +7,7 @@ from django.utils import simplejson
 
 import model
 
-class AquireId(webapp.RequestHandler):
+class AcquireId(webapp.RequestHandler):
 
     def get(self):
         self.response.out.write(simplejson.dumps(str(uuid.uuid4())))
@@ -43,3 +43,25 @@ class GpsHandler(webapp.RequestHandler):
       location = model.Location(key_name=id, longitude=longitude, latitude=latitude)
       location.put()
       self.redirect('/%s/gps/' % id)
+
+class DevHandler(webapp.RequestHandler):
+
+  def get(self, id):
+    location = model.Location.get_by_key_name(id)
+    template_values = {'id':id, 'longitude':location.longitude, 'latitude':location.latitude}
+    path = os.path.join(os.path.dirname(__file__), 'dev.html')
+    self.response.out.write(template.render(path, template_values))
+
+  def post(self, id):
+      longitude = float(self.request.POST["longitude"])
+      latitude = float(self.request.POST["latitude"])
+      location = model.Location(key_name=id, longitude=longitude, latitude=latitude)
+      location.put()
+      self.redirect('/%s/dev/' % id)
+
+class MainHandler(webapp.RequestHandler):
+
+  def get(self, id):
+    template_values = {'id':id}
+    path = os.path.join(os.path.dirname(__file__), 'index.html')
+    self.response.out.write(template.render(path, template_values))

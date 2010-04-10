@@ -33,7 +33,7 @@ function getLocation()
 {
 	$.ajax({
 	method: 'get',
-	url : 'http://follow-me-now.appspot.com/123/',
+	url : '/{{ id }}/location/',
 	dataType : 'json',
 	success: updateLocation
 });
