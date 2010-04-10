@@ -32,6 +32,8 @@ ID_RE = '/([a-z0-9_-]+)/'
 
 def main():
   application = webapp.WSGIApplication([('/', MainHandler),
+                                        ('/gps/', handlers.GpsHandler),
+                                        (ID_RE + 'gps/', handlers.GpsHandler),                                        
                                         ('/aquire', handlers.AquireId),
                                          (ID_RE, handlers.LocationHandler)],
                                        debug=True)

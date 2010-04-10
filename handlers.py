@@ -1,6 +1,8 @@
+import os
 import logging
 import uuid
 from google.appengine.ext import webapp
+from google.appengine.ext.webapp import template
 from django.utils import simplejson
 
 import model
@@ -27,3 +29,17 @@ class LocationHandler(webapp.RequestHandler):
         location = model.Location(key_name=id, longitude=longitude, latitude=latitude)
         location.put()
 	#self.redirect('/%s/'%id)
+
+class GpsHandler(webapp.RequestHandler):
+
+  def get(self, id=None):
+    template_values = {}
+    path = os.path.join(os.path.dirname(__file__), 'gps.html')
+    self.response.out.write(template.render(path, template_values))
+
+  def post(self, id):
+      longitude = float(self.request.POST["longitude"])
+      latitude = float(self.request.POST["latitude"])
+      location = model.Location(key_name=id, longitude=longitude, latitude=latitude)
+      location.put()
+      self.redirect('/%s/gps/' % id)
