@@ -1,0 +1,68 @@
+<html>
+  <title>Follow me now</title>
+  <meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
+<script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=true"></script>
+<script type="text/javascript">
+// Note that using Google Gears requires loading the Javascript
+// at http://code.google.com/apis/gears/gears_init.js
+
+var initialLocation;
+var siberia = new google.maps.LatLng(60, 105);
+var newyork = new google.maps.LatLng(40.69847032728747, -73.9514422416687);
+var browserSupportFlag =  new Boolean();
+
+function initialize() {
+  var myOptions = {
+    zoom: 6,
+    mapTypeId: google.maps.MapTypeId.ROADMAP
+  };
+  var map = new google.maps.Map(document.getElementById("map_canvas"), myOptions);
+  
+  // Try W3C Geolocation (Preferred)
+  if(navigator.geolocation) {
+    browserSupportFlag = true;
+    navigator.geolocation.getCurrentPosition(function(position) {
+      initialLocation = new google.maps.LatLng(position.coords.latitude,position.coords.longitude);
+      map.setCenter(initialLocation);
+      var marker = new google.maps.Marker({
+            position: initialLocation,
+            map: map, 
+            title:"Follow me now!"
+      });   
+    }, function() {
+      handleNoGeolocation(browserSupportFlag);
+    });
+  // Try Google Gears Geolocation
+  } else if (google.gears) {
+    browserSupportFlag = true;
+    var geo = google.gears.factory.create('beta.geolocation');
+    geo.getCurrentPosition(function(position) {
+      initialLocation = new google.maps.LatLng(position.latitude,position.longitude);
+      map.setCenter(initialLocation);
+    }, function() {
+      handleNoGeoLocation(browserSupportFlag);
+    });
+  // Browser doesn't support Geolocation
+  } else {
+    browserSupportFlag = false;
+    handleNoGeolocation(browserSupportFlag);
+  }
+  
+  function handleNoGeolocation(errorFlag) {
+    if (errorFlag == true) {
+      alert("Geolocation service failed.");
+      initialLocation = newyork;
+    } else {
+      alert("Your browser doesn't support geolocation. We've placed you in Siberia.");
+      initialLocation = siberia;
+    }
+    map.setCenter(initialLocation);
+  }
+}
+</script>
+<body style="margin:0px; padding:0px;" onload="initialize()">
+    <h1>Follow me now</h1>
+     <div id="map_canvas" style="width:100%; height:100%"></div>
+  </body>
+</html>
+
