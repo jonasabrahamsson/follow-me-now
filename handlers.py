@@ -22,7 +22,8 @@ class LocationHandler(webapp.RequestHandler):
 
 
     def post(self, id):
-        longitude = float(self.request.GET["longitude"])
-        latitude = float(self.request.GET["latitude"])
+        longitude = float(self.request.POST["longitude"])
+        latitude = float(self.request.POST["latitude"])
         location = model.Location(key_name=id, longitude=longitude, latitude=latitude)
         location.put()
+	#self.redirect('/%s/'%id)
