@@ -20,12 +20,33 @@ var siberia = new google.maps.LatLng(60, 105);
 var newyork = new google.maps.LatLng(40.69847032728747, -73.9514422416687);
 var browserSupportFlag =  new Boolean();
 
+function updateLocation(loc)
+{
+	altert("Received position " + loc.latitude + ":" + loc.longitude);
+	newLocation = new google.maps.LatLng(loc.latitude, loc.longitude);
+	map.setCenter(newLocation);
+	marker.position = newLocation;
+}
+
+function getLocation()
+{
+	$.ajax({
+	method: 'get',
+	url : 'http://localhost:8080/123',
+	dataType : 'text',
+	success: updateLocation
+});
+}
+
 function initialize() {
   var myOptions = {
     zoom: 6,
     mapTypeId: google.maps.MapTypeId.ROADMAP
   };
   var map = new google.maps.Map(document.getElementById("map_canvas"), myOptions);
+  var marker;
+
+  var getLocationInterval = setInterval(getLocation, 1000);
   
   // Try W3C Geolocation (Preferred)
   if(navigator.geolocation) {
@@ -33,7 +54,7 @@ function initialize() {
     navigator.geolocation.getCurrentPosition(function(position) {
       initialLocation = new google.maps.LatLng(position.coords.latitude,position.coords.longitude);
       map.setCenter(initialLocation);
-      var marker = new google.maps.Marker({
+      marker = new google.maps.Marker({
             position: initialLocation,
             map: map, 
             title:"Follow me now!"

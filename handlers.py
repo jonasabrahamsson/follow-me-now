@@ -20,5 +20,6 @@ class GetLocation(webapp.RequestHandler):
         logging.error(id)
         location = model.Location.get_by_key_name(id)
         if location is not None:
-            return self.response.out.write(simplejson.dumps((location.longitude, location.latitude)))
+            return self.response.out.write(simplejson.dumps({'latitude':location.latitude, 
+								'longitude':location.longitude}))
         return self.response.out.write(simplejson.dumps(()))
